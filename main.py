@@ -6,9 +6,9 @@ from utils import utilities
 if (len(sys.argv) != 2):
     print("Specify your WOL directory")
     exit()
-WOLPath = sys.argv[1]
 
-myUtils = utilities(WOLPath)
+# load all relevant files
+myUtils = utilities(sys.argv[1])
 
 # Filter by only military units
 unitList = list(filter(lambda unit: myUtils.isValidUnit(unit),myUtils.protoyXml))
