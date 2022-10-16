@@ -20,7 +20,8 @@ docFormat = [{'header': 'Name', 'function': lambda unitSchema: myUtils.getUnitNa
                  myUtils.getResourceCost(unitSchema, 'Food'))},
              {'header': 'Wood', 'function': lambda unitSchema: myUtils.prettyValue(
                  myUtils.getResourceCost(unitSchema, 'Wood'))},
-             {'header': 'Gold', 'function': lambda unitSchema: myUtils.prettyValue(myUtils.getResourceCost(unitSchema, 'Coin'))},
+             {'header': 'Gold', 'function': lambda unitSchema: myUtils.prettyValue(
+                 myUtils.getResourceCost(unitSchema, 'Gold'))},
              {'header': 'Trainable By', 'function': lambda unitSchema: myUtils.prettyValue(myUtils.findCivsThatCanTrain(unitSchema))}]
 
 
