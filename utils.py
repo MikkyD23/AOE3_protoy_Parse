@@ -116,6 +116,23 @@ class utilities:
         for cost in costs:
             if(cost.get('@resourcetype') == lookFor): return cost.get('#text')
 
+    def getTopLevelUnitValue(self, unitSchema, lookFor):
+        return unitSchema.get(lookFor)
+
+
+    def getArmourValue(self, unitSchema, lookFor):
+        # put into list if it's not 
+        # so we can loop both dicts and lists
+        armo = unitSchema.get('Armor')
+        armorTypes = [armo] if type(armo) is dict else armo
+
+        # Find matching type if we have it
+        for armorType in armorTypes:
+            if(armorType.get('@type') == lookFor):
+                return armorType.get('@value')
+        return False
+
+
 
     def prettyValue(self,value):
         if(type(value) is str):
