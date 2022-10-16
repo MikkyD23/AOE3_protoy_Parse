@@ -180,7 +180,3 @@ class utilities:
 
 
 
-thisUtils = utilities("C:\\Program Files (x86)\\Wars of Liberty")
-# print(findCivsThatCanTrain("NABushranger",readTechTreeXml(thisWolPath),readCivsXml(thisWolPath)))
-
-# print(thisUtils.stringTableTxt)
