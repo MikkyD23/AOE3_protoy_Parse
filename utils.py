@@ -72,7 +72,7 @@ class utilities:
         if(type(effectList) is dict): effectList = [effectList]
 
         # Check we have an effect with type=enable, and with a valid target
-        effectsWithTargets = list(filter(lambda effect : '@subtype' in effect and effect['@subtype'] == 'Enable' and "Target" in effect,effectList))
+        effectsWithTargets = list(filter(lambda effect : '@subtype' in effect and (effect['@subtype'] == 'Enable' or effect['@subtype'] == 'FreeHomeCityUnit') and "Target" in effect,effectList))
 
         # Check the target exists and matches what we're looking for
         effectsThatMatch = list(filter(lambda effect : '#text' in effect['Target'] and effect['Target']['#text'] == unitName,effectsWithTargets))
