@@ -1,8 +1,6 @@
-from types import UnionType
 import xmltodict
-import json
 
-
+import unidecode
 
 
 # All extra functions
@@ -19,7 +17,7 @@ class utilities:
     protoyXml = ''
     techtreeXML = ''
     civsXml = ''
-    stringTableTxt = ''
+    stringTableXml = ''
 
     def __init__(self, WOLPath):
         # initialise protoy.xml
@@ -33,12 +31,12 @@ class utilities:
         f = open(f"{WOLPath}\\data\\civs.xml",'r')
         self.civsXml = xmltodict.parse(f.read())['civs']['civ']
 
-        f = open(f"{WOLPath}\\data\\stringtabley.xml",'r',encoding="utf-16-le")
-        # this string table is using special characters
-        # shitty workarounds with string manipulation
-        # self.stringTableXml = xmltodict.parse(f.read())['StringTable']['Language']['String']
-        # .decode('utf-16-le')
-        self.stringTableTxt = f.read()
+        # f = open(f"{WOLPath}\\data\\stringtabley.xml",'r',encoding="utf-16-le")
+        f = open(f"{WOLPath}\\data\\stringtabley.xml",'r',encoding='utf-16-le')
+
+        # this string table is using utf-16-le
+        # so we need to remove all invalid characters before we try and output to file (printing to console is fine)
+        self.stringTableXml = xmltodict.parse(f.read())['StringTable']['Language']['String']
 
 
 
@@ -134,19 +132,27 @@ class utilities:
         return value
     
     def getUnitName(self,unitSchema):
-        return self._getNameFromStringTable(unitSchema.get('DisplayNameID'))
+        name = self._getNameFromStringTable(unitSchema.get('DisplayNameID'))
+        return name
 
 
-    # Use awful string manipulation because string table schema isn't correct for xml
+    # Find associated language string from stringTable
     def _getNameFromStringTable(self,nameID):
-        stringTable = self.stringTableTxt[:]
+        match = list(filter(lambda entry : entry.get('@_locID') == nameID,self.stringTableXml))
 
-        # remove everything before the ID
-        stringTable = stringTable[stringTable.find(str(nameID)):]
-        # Only use whatever is in the next pair of braces
-        stringTable = stringTable[stringTable.find('>')+1:stringTable.find('<')]
+        # Wasn't in the table??
+        if(len(match) < 1): return False
+        
+        unitName = match[0].get('#text')
 
-        return stringTable
+        assert(type(unitName) is str)
+
+        
+        # since it's converted from utf-16-le (and there's invalid characters)
+        # remove all non alphanumeric chars
+        unitName = unidecode.unidecode(unitName)
+
+        return unitName
 
     # Returns a pretty civilisation name if the tech is associated with a civ directly
     def _techDirectlyAssociated(self, techName, civsXml):
@@ -165,6 +171,12 @@ class utilities:
                     continue
         # print(f"tech: {techName}, is not directly associated with a civ")
         return False
+
+
+    def isValidUnit(self, unitSchema):
+        # We only want to select units, they would have a unittype called "unit"
+        # they would also have at least a HP value
+        return 'UnitType' in unitSchema.keys() and 'Unit' in unitSchema['UnitType'] and unitSchema.get('MaxHitpoints')
 
 
 
