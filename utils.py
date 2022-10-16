@@ -120,8 +120,13 @@ class utilities:
     def prettyValue(self,value):
         if(type(value) is str):
             try: return int(value)
-            except: return float(value)
-            finally: return value
+            except: pass
+            
+            # remove trailing zeros from long string float
+            try: return float(value)
+            except: pass
+
+            return value
         
         if(type(value) is list):
             accList = ''
