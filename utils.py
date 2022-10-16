@@ -137,11 +137,11 @@ class utilities:
 
     def prettyValue(self,value):
         if(type(value) is str):
-            try: return int(value)
+            try: return str(int(value))
             except: pass
             
             # remove trailing zeros from long string float
-            try: return float(value)
+            try: return str(float(value))
             except: pass
 
             return value
