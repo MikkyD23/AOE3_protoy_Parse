@@ -124,6 +124,7 @@ class utilities:
         # put into list if it's not 
         # so we can loop both dicts and lists
         armo = unitSchema.get('Armor')
+        if(not armo): return False
         armorTypes = [armo] if type(armo) is dict else armo
 
         # Find matching type if we have it
